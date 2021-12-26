@@ -8,9 +8,10 @@ class ApiService {
   }
 
   async getData() {
-    return await Axios.get(
-      `https://pixabay.com/api/?key=24955423-ef35e097f581ba14a8380bbca&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`,
-    )
+    return await Axios
+      .get(
+        `https://pixabay.com/api/?key=24955423-ef35e097f581ba14a8380bbca&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`,
+      )
       .then(response => {
         this.nextPage();
         return response.data;
@@ -35,4 +36,4 @@ class ApiService {
   }
 }
 
-export default ApiService;
+export default  ApiService

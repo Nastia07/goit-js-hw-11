@@ -4,15 +4,19 @@ import ApiService from './imagesApiService.js';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
+const refs = {
+  gallery: document.querySelector('.gallery'),
+  loadMoreButton: document.querySelector('.load-more'),
+  searchFormButton: document.querySelector('.search-form')
+}
+
 const Api = new ApiService();
+const lightBox = new SimpleLightbox('.photo-card a');
 
-const gallery = document.querySelector('.gallery');
-const loadMoreButton = document.querySelector('.load-more');
-loadMoreButton.style.display = 'none';
-const searchFormButton = document.querySelector('.search-form');
+refs.loadMoreButton.style.display = 'none';
 
-searchFormButton.addEventListener('submit', search);
-loadMoreButton.addEventListener('click', loadMore);
+refs.searchFormButton.addEventListener('submit', search);
+refs.loadMoreButton.addEventListener('click', loadMore);
 
 function search(evt) {
   evt.preventDefault();
@@ -27,7 +31,7 @@ function search(evt) {
       return elem;
     })
     .then(renderData);
-  gallery.innerHTML = '';
+  refs.gallery.innerHTML = '';
 }
 
 function loadMore() {
@@ -41,7 +45,7 @@ function loadMore() {
 
 function showNotification(data) {
   if (data.totalHits > 40) {
-    loadMoreButton.style.display = '';
+    refs.loadMoreButton.style.display = '';
   }
 
   if (data.totalHits > 0) {
@@ -50,13 +54,11 @@ function showNotification(data) {
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.',
     );
-    loadMoreButton.style.display = 'none';
+    refs.loadMoreButton.style.display = 'none';
   }
 }
 
 function renderData(data) {
-  const lightBox = new SimpleLightbox('.photo-card a');
-
   const hits = data.hits
     .map(elem => {
       return `<div class='photo-card'>
@@ -84,13 +86,13 @@ function renderData(data) {
               </div>`;
     })
     .join('');
-  gallery.insertAdjacentHTML('beforeend', hits);
+  refs.gallery.insertAdjacentHTML('beforeend', hits);
   lightBox.refresh();
 }
 
 function scroll() {
   setTimeout(() => {
-    const { height: cardHeight } = gallery.firstElementChild.getBoundingClientRect();
+    const { height: cardHeight } = refs.gallery.firstElementChild.getBoundingClientRect();
 
     window.scrollBy({
       top: cardHeight * 2,
