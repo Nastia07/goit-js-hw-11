@@ -9,11 +9,10 @@ const Api = new ApiService();
 const gallery = document.querySelector('.gallery');
 const loadMoreButton = document.querySelector('.load-more');
 loadMoreButton.style.display = 'none';
-const searchFormButton = document.querySelector('.search-form')
+const searchFormButton = document.querySelector('.search-form');
 
 searchFormButton.addEventListener('submit', search);
 loadMoreButton.addEventListener('click', loadMore);
-
 
 function search(evt) {
   evt.preventDefault();
@@ -22,17 +21,17 @@ function search(evt) {
 
   Api.searchQuery = evt.target.elements.searchQuery.value;
 
-  Api.getData().then(elem => {
-        showNotification(elem);
-        return elem;
-      })
-      .then(renderData);
+  Api.getData()
+    .then(elem => {
+      showNotification(elem);
+      return elem;
+    })
+    .then(renderData);
   gallery.innerHTML = '';
 }
 
 function loadMore() {
-  Api
-    .getData()
+  Api.getData()
     .then(data => {
       return data;
     })
@@ -42,7 +41,7 @@ function loadMore() {
 
 function showNotification(data) {
   if (data.totalHits > 40) {
-    loadMoreButton.style.display  = ""
+    loadMoreButton.style.display = '';
   }
 
   if (data.totalHits > 0) {
@@ -51,7 +50,7 @@ function showNotification(data) {
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.',
     );
-    loadMoreButton.style.display  = "none"
+    loadMoreButton.style.display = 'none';
   }
 }
 
@@ -91,8 +90,7 @@ function renderData(data) {
 
 function scroll() {
   setTimeout(() => {
-    const { height: cardHeight } = gallery
-      .firstElementChild.getBoundingClientRect();
+    const { height: cardHeight } = gallery.firstElementChild.getBoundingClientRect();
 
     window.scrollBy({
       top: cardHeight * 2,
