@@ -12,6 +12,7 @@ const refs = {
 
 const Api = new ApiService();
 const lightBox = new SimpleLightbox('.photo-card a');
+const inValid = new RegExp('^[_A-z0-9]{1,}$');
 
 refs.loadMoreButton.style.display = 'none';
 
@@ -25,13 +26,19 @@ function search(evt) {
 
   Api.searchQuery = evt.target.elements.searchQuery.value;
 
-  Api.getData()
+  if (inValid.test(Api.searchQuery)){
+    Api.getData()
     .then(elem => {
       showNotification(elem);
       return elem;
     })
     .then(renderData);
   refs.gallery.innerHTML = '';
+  } else {
+    Notiflix.Notify.failure(
+      'Sorry, you have to enter correct value',
+    );
+  }
 }
 
 function loadMore() {
