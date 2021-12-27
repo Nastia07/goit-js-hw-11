@@ -12,7 +12,7 @@ const refs = {
 
 const Api = new ApiService();
 const lightBox = new SimpleLightbox('.photo-card a');
-const inValid = new RegExp('^[_A-zА-яё0-9]{1,}$');
+const inValid = new RegExp('^[_A-zА-я0-9]{1,}$');
 
 refs.loadMoreButton.style.display = 'none';
 
