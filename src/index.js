@@ -8,11 +8,10 @@ const refs = {
   gallery: document.querySelector('.gallery'),
   loadMoreButton: document.querySelector('.load-more'),
   searchFormButton: document.querySelector('.search-form')
-}
+};
 
 const Api = new ApiService();
 const lightBox = new SimpleLightbox('.photo-card a');
-const inValid = new RegExp('^[_A-zА-я0-9]{1,}$');
 
 refs.loadMoreButton.style.display = 'none';
 
@@ -24,29 +23,32 @@ function search(evt) {
 
   Api.resetPage();
 
-  Api.searchQuery = evt.target.elements.searchQuery.value;
+  Api.searchQuery = evt.target.elements.searchQuery.value.trim();
 
-  if (inValid.test(Api.searchQuery)){
+  if (Api.searchQuery.length === 0){
+    Notiflix.Notify.failure('Sorry, you have to enter some value');
+  } else {
     Api.getData()
     .then(elem => {
       showNotification(elem);
       return elem;
     })
     .then(renderData);
-  refs.gallery.innerHTML = '';
-  } else {
-    Notiflix.Notify.failure(
-      'Sorry, you have to enter correct value',
-    );
+    refs.gallery.innerHTML = '';
   }
 }
 
 function loadMore() {
   Api.getData()
     .then(data => {
+      console.log(data)
       return data;
     })
-    .then(renderData);
+    .then(renderData)
+    .catch(e =>{
+      refs.loadMoreButton.style.display = 'none';
+      Notiflix.Notify.info('Show all images!');
+    })
   scroll();
 }
 
@@ -54,18 +56,18 @@ function showNotification(data) {
   if (data.totalHits > 40) {
     refs.loadMoreButton.style.display = '';
   }
-
   if (data.totalHits > 0) {
     Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
   } else {
     Notiflix.Notify.failure(
-      'Sorry, there are no images matching your search query. Please try again.',
+      'Sorry, there are no images matching your search query.Please try again.',
     );
     refs.loadMoreButton.style.display = 'none';
   }
 }
 
 function renderData(data) {
+
   const hits = data.hits
     .map(elem => {
       return `<div class='photo-card'>
