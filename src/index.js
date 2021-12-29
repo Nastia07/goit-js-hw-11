@@ -41,19 +41,19 @@ function search(evt) {
 function loadMore() {
   Api.getData()
     .then(data => {
+      if (Api.totalHits > data.totalHits){
+        refs.loadMoreButton.style.display = 'none';
+        setTimeout(() => {
+          Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+        }, 2000);
+      }
       return data;
     })
-    .then(data => {
-      if (Api.hits <= data.totalHits){
-        renderData(data)
-      }else{
-        refs.loadMoreButton.style.display = 'none';
-        Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-      }
-    })
-    .catch()
+    .then(renderData)
+    .catch();
   scroll();
 }
+
 
 function showNotification(data) {
   if (data.totalHits > 40) {

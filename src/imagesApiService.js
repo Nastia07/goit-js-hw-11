@@ -5,7 +5,7 @@ class ApiService {
     this.searchQuery = '';
     this.page = 1;
     this.perPage = 40;
-    this.hits = 0;
+    this.totalHits = 0;
   }
 
   async getData() {
@@ -15,7 +15,7 @@ class ApiService {
       )
       .then(response => {
         this.nextPage();
-        this.hits += response.data.hits.length;
+        this.totalHits += response.data.hits.length;
         return response.data;
       })
       .catch();
