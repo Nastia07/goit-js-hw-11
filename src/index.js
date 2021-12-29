@@ -41,14 +41,17 @@ function search(evt) {
 function loadMore() {
   Api.getData()
     .then(data => {
-      console.log(data)
       return data;
     })
-    .then(renderData)
-    .catch(e =>{
-      refs.loadMoreButton.style.display = 'none';
-      Notiflix.Notify.info('Show all images!');
+    .then(data => {
+      if (Api.hits <= data.totalHits){
+        renderData(data)
+      }else{
+        refs.loadMoreButton.style.display = 'none';
+        Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+      }
     })
+    .catch()
   scroll();
 }
 
